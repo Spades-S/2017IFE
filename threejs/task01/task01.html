@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>three.js入门DEMO-cube</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<canvas id="myCanvas" width="600px" height="400px"></canvas>
+<script src="../three.js-master/build/three.js"></script>
+<script>
+    const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'),
+        antialias: true,
+        precision: "highp"
+
+    })
+    renderer.setClearColor(0x999999)
+    const scene = new THREE.Scene()
+    const camera = new THREE.OrthographicCamera(-2, 2, 1.5, -1.5, 1, 120)
+    camera.position.set(4, 5, 4)
+    camera.lookAt(new THREE.Vector3(0, 0, 0))
+    scene.add(camera)
+
+
+    const material1 = new THREE.MeshLambertMaterial({
+        color: 0xd3d3d3,
+    })
+    const material2 = new THREE.MeshLambertMaterial({
+        color: 0xada4a4
+    })
+    const cubeGeo = new THREE.CubeGeometry(1.4, 1, 0.9)
+    const cube = new THREE.Mesh(cubeGeo, material1)
+    scene.add(cube)
+
+    const torusGeo = new THREE.TorusGeometry(0.14, 0.05, 20, 50)
+    const torus1 = new THREE.Mesh(torusGeo, material2)
+    const torus2 = new THREE.Mesh(torusGeo, material2)
+    torus1.position.set(-0.4, -0.6, 0.45)
+    torus2.position.set(0.4, -0.6, 0.45)
+    scene.add(torus1)
+    scene.add(torus2)
+
+
+    const light = new THREE.PointLight(0xff0000, 2, 100);     //点光源
+    light.position.set(1, 9, 0);      //点光源位置
+    scene.add(light);
+
+    renderer.render(scene, camera)
+
+</script>
+</body>
+</html>
+
