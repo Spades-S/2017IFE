@@ -5,13 +5,12 @@
 </head>
 <body>
 <canvas id="myCanvas" width="600px" height="400px"></canvas>
-<script src="../three.js-master/build/three.js"></script>
+<script src="../library/three.js"></script>
 <script>
     const renderer = new THREE.WebGLRenderer({
         canvas: document.getElementById('myCanvas'),
         antialias: true,
         precision: "highp"
-
     })
     renderer.setClearColor(0x999999)
     const scene = new THREE.Scene()
