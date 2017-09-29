@@ -1,0 +1,78 @@
+<html>
+<head>
+    <title>three.js入门DEMO-材质和纹理</title>
+    <meta charset="utf-8">
+</head>
+<body>
+
+<canvas id="myCanvas" width="600px" height="400px"></canvas>
+<script src="../library/three.js"></script>
+<script>
+    const backgroundColor = 0x868686
+    const texture_car = THREE.ImageUtils.loadTexture('./textures/car_body.jpg', {}, function () {
+        renderer.render(scene, camera)
+    })
+    const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'),
+        antialias: true,
+        precision: "highp"
+
+    })
+    const texture_floor = THREE.ImageUtils.loadTexture('./textures/floor.jpg', {}, function () {
+        renderer.render(scene, camera)
+    })
+    renderer.setClearColor(0x999999)
+    renderer.shadowMap.enabled = true
+    //    renderer.shadowMapSoft = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene()
+    const camera = new THREE.OrthographicCamera(-2, 2, 1.5, -1.5, 1, 120)
+    camera.position.set(4, 5, 4)
+    camera.lookAt(new THREE.Vector3(0, 0, 0))
+    scene.add(camera)
+
+
+    const material1 = new THREE.MeshLambertMaterial({
+        map: texture_car
+    })
+    const material2 = new THREE.MeshLambertMaterial({
+        color: 0xbdd88e,
+        map: texture_floor
+    })
+    const cubeGeo = new THREE.CubeGeometry(1.4, 1, 0.9)
+    const cube = new THREE.Mesh(cubeGeo, material1)
+    cube.castShadow = true
+    scene.add(cube)
+
+    const torusGeo = new THREE.TorusGeometry(0.14, 0.05, 20, 50)
+    const torus1 = new THREE.Mesh(torusGeo, material1)
+    const torus2 = new THREE.Mesh(torusGeo, material1)
+    torus1.position.set(-0.4, -0.6, 0.45)
+    torus2.position.set(0.4, -0.6, 0.45)
+    torus1.castShadow = true
+    torus2.castShadow = true
+    scene.add(torus1)
+    scene.add(torus2)
+
+
+    const planeGeo = new THREE.PlaneGeometry(2.5, 3)
+    const plane = new THREE.Mesh(planeGeo, material2)
+    plane.rotation.x = -Math.PI / 2
+    plane.position.set(-0.3, -0.8, 0)
+    plane.receiveShadow = true
+
+    scene.add(plane)
+
+
+    const light = new THREE.DirectionalLight(0xffffff, 1)
+    light.position.set(1, 5, 7)
+    light.castShadow = true
+    scene.add(light)
+
+    renderer.render(scene, camera)
+
+</script>
+</body>
+</html>
+
