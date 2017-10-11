@@ -1,0 +1,155 @@
+<html>
+<head>
+    <title>three.js入门DEMO-外部模型</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<canvas id="mainCanvas" width="1000" height="500"></canvas>
+<script src="../library/three.js"></script>
+<script src="./lib/trackballControl.js"></script>
+<script src="./lib/OBJLoader.js"></script>
+<script src="./lib/MTLLoader.js"></script>
+<script>
+    var renderer = null, scene = null, camera = null, control = null, car = null
+    var driveStat = 0  //小车的行驶状态，0 => 默认状态，1 => 前进, 2 => 后退, 3 => 左转, 4 => 右转
+    var carSpeed = 0.5, rotationSpeed = 0.04
+
+    initScene()
+    getHelpers()
+    loadObj()
+    initControl()
+    rePaint()
+    renderer.render(scene, camera)
+
+    /**
+     * init basic scene
+     */
+    function initScene() {
+        renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('mainCanvas'),
+            antialias: true,
+        })
+        renderer.setClearColor(0xbbbbbb)
+        scene = new THREE.Scene()
+        camera = new THREE.PerspectiveCamera(75, 2, 1, 1000)
+        camera.position.set(10, 10, 10)
+//        camera.lookAt(new THREE.Vector3(0, 0, 0))
+        camera.lookAt(new THREE.Vector3(10, 0, 0))
+
+        scene.add(camera)
+
+        var plane = new THREE.Mesh(new THREE.PlaneGeometry(70, 70), new THREE.MeshBasicMaterial({
+            color: 0x888888
+        }))
+        scene.add(plane)
+        plane.rotation.x = -Math.PI / 2
+        const light = new THREE.DirectionalLight(0xffffff, 1)
+        light.position.set(-3, 5, 7)
+        light.castShadow = true
+        scene.add(light)
+    }
+
+    /**
+     * add AxisHelper to Scene
+     */
+    function getHelpers() {
+        var axisHelper = new THREE.AxisHelper(10)
+        var cameraHelper = new THREE.CameraHelper(camera)
+        scene.add(axisHelper)
+        scene.add(cameraHelper)
+    }
+
+    /**
+     * loading Obj
+     */
+    function loadObj() {
+        var mtlLoader = new THREE.MTLLoader()
+        mtlLoader.setPath('./model/')
+        mtlLoader.load('MiniCooperCountryman.mtl', function (materials) {
+            materials.preload()
+            var objLoader = new THREE.OBJLoader()
+            objLoader.setMaterials(materials)
+            objLoader.setPath('./model/')
+            objLoader.load('MiniCooperCountryman.obj', function (obj) {
+                car = obj
+                obj.rotation.x = -Math.PI / 2
+                scene.add(obj)
+                renderer.render(scene, camera)
+            })
+        }, function () {
+        }, function (err) {
+            console.info('Loader Err', err)
+        })
+    }
+
+
+    /**
+     * init the Control Method
+     */
+    function initControl() {
+        control = new THREE.TrackballControls(camera)
+        control.addEventListener('change', function () {
+            renderer.render(scene, camera)
+        })
+    }
+
+    /**
+     * repatin the canvas
+     */
+    function rePaint() {
+        requestAnimationFrame(rePaint)
+        control.update()
+        //camera.lookAt需要放在contorl后，tarckballControl会重写camera.lookAt方向
+        //drive()和camera.lookAt两句的顺序需要注意，否则会发生抖动现象
+        drive()
+        if (car) {
+            camera.lookAt(car.getWorldPosition())
+        }
+        renderer.render(scene, camera)
+
+    }
+
+    document.onkeydown = function (event) {
+        switch (event.keyCode) {
+            case 87:
+                driveStat = 1
+                break
+            case 83:
+                driveStat = 2
+                break
+            case 65:
+                driveStat = 3
+                break
+            case 68:
+                driveStat = 4
+                break
+        }
+
+    }
+
+    function drive() {
+        switch (driveStat) {
+            case 1:
+                car.position.z -= Math.cos(car.rotation.z)*carSpeed
+                car.position.x -= Math.sin(car.rotation.z)*carSpeed
+                break
+            case 2:
+                car.position.z += Math.cos(car.rotation.z)*carSpeed
+                car.position.x += Math.sin(car.rotation.z)*carSpeed
+                break
+            case 3:
+                car.rotation.z += rotationSpeed
+                break
+            case 4:
+                car.rotation.z -= rotationSpeed
+                break
+
+        }
+        driveStat = 0
+    }
+
+</script>
+
+
+</body>
+</html>
