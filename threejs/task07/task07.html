@@ -1,0 +1,125 @@
+<html>
+<head>
+    <title>three.js入门DEMO-着色器</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<canvas id="mainCancas" width="1000" height="500"></canvas>
+<script src="../library/three.js"></script>
+<script src="./lib/trackballControl.js"></script>
+<script src="./lib/TeapotBufferGeometry.js"></script>
+<script>
+    let renderer = null, camera = null, scene = null, control = null, directionalLight = null, teaPot = null
+
+    scene = new THREE.Scene()
+    getRender()
+    getCamera(scene)
+    getTeaPot(scene)
+    getLight(scene)
+    getControl()
+    getHelpers(scene)
+    rePaint()
+    render()
+
+
+    async function result() {
+        let vs = await getFile('./shader/celshader.vs')
+        let fs = await getFile('./shader/celshader.fs')
+        let material = new THREE.ShaderMaterial({
+            vertexShader: vs,
+            fragmentShader: fs,
+            uniforms: {
+                color: {
+                    type: 'v3',
+                    value: new THREE.Color('#ffa354')
+                },
+                light: {
+                    type: 'v3',
+                    value: directionalLight.position
+                }
+            }
+
+        })
+        teaPot.material = material
+        renderer.render(scene, camera)
+    }
+
+    result()
+
+
+    function getRender() {
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            canvas: document.getElementById('mainCancas')
+        })
+        renderer.setClearColor(0x999999)
+    }
+
+    function getCamera(Scene) {
+        camera = new THREE.PerspectiveCamera(75, 2, 1, 100)
+        camera.position.set(6, 6, 6)
+        camera.lookAt(new THREE.Vector3(0, 0, 0))
+        scene.add(camera)
+    }
+
+    function getLight(Scene) {
+//        let ambientLight = new THREE.AmbientLight(0x666666)
+        directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+        directionalLight.position.set(-5, 5, 10)
+//        Scene.add(ambientLight)
+        Scene.add(directionalLight)
+    }
+
+    function getControl() {
+        control = new THREE.TrackballControls(camera)
+        control.addEventListener('change', render)
+    }
+
+    function getTeaPot(Scene) {
+        teaPot = new THREE.Mesh(new THREE.TeapotBufferGeometry(3), new THREE.MeshLambertMaterial({}))
+
+        Scene.add(teaPot)
+    }
+
+    function render() {
+        renderer.render(scene, camera)
+    }
+
+    function rePaint() {
+        requestAnimationFrame(rePaint)
+        control.update()
+    }
+
+    function getHelpers(Scene) {
+        let axisHelper = new THREE.AxisHelper(10)
+        let cameraHelper = new THREE.CameraHelper(camera)
+        Scene.add(axisHelper)
+        Scene.add(cameraHelper)
+
+    }
+
+    function getFile(path) {
+        return new Promise(function (resolve, reject) {
+            let xhr = new XMLHttpRequest()
+            xhr.open('get', path, true)
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(xhr.responseText)
+                    }
+                }
+            }
+            xhr.onerror = function () {
+                reject('Network error')
+            }
+            xhr.send(null)
+
+        })
+
+
+    }
+
+
+</script>
+</body>
+</html>
