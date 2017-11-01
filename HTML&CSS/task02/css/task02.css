@@ -1,0 +1,123 @@
+body {
+    background: grey;
+    min-width: 700px;
+}
+
+#navbar {
+    background-color: rgba(135, 149, 220, 0.64);
+}
+
+#navbar img {
+    height: 120px;
+    width: 250px;
+}
+
+#navbar ul {
+    list-style: none;
+    float: right;
+    margin-top: 85px;
+    margin-right: 30px;
+}
+
+#navbar ul li {
+    float: left;
+    margin-left: 15px;
+}
+
+#navbar a {
+    text-decoration: none;
+    color: white;
+}
+
+#navbar a:hover {
+    color: black;
+}
+
+.article {
+    background: white;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.title_2 {
+    color: grey;
+    font-size: 15px;
+}
+
+.article_info {
+    color: grey;
+    font-size: 11px;
+}
+
+.img_frame {
+    border: 1px solid grey;
+    width: 200px;
+    text-align: center;
+    height: 200px;
+    padding: 10px;
+    margin: 20px 2em;
+}
+
+.img_frame img {
+    max-width: 100%;
+}
+
+table {
+    text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid grey;
+}
+
+table thead {
+    color: white;
+    background-color: black;
+}
+
+table tbody {
+    color: grey;
+    font-size: 14px;
+}
+
+table tfoot {
+    background-color: grey;
+}
+
+.border_left {
+    border-left: 3px solid grey;
+    padding: 6px;
+}
+
+form .item_name {
+    display: inline-block;
+    width: 200px;
+    text-align: right;
+    margin-left: 200px;
+    vertical-align: top;
+}
+
+form .hint {
+    margin-left: 405px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    color: grey;
+    font-size: 13px;
+}
+
+form .item {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+form textarea {
+    font-size: 15px;
+}
+
+form .submit {
+    color: white;
+    background-color: #5252d6;
+    width: 100%;
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 6px;
+}

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
 </head>
 <body>
+
 <canvas id="myCanvas" width="600px" height="400px"></canvas>
 <script src="../library/three.js"></script>
 <script>
@@ -16,6 +17,7 @@
     })
     renderer.setClearColor(0x999999)
     renderer.shadowMap.enabled = true
+//    renderer.shadowMapSoft = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const scene = new THREE.Scene()
@@ -57,10 +59,10 @@
     const light = new THREE.DirectionalLight(0xffffff, 1)
     light.position.set(-3, 5, 7)
     light.castShadow = true
-//    light.shadow.mapSize.width = 512;  // default
-//    light.shadow.mapSize.height = 512; // default
-//    light.shadow.camera.near = 0.5;       // default
-//    light.shadow.camera.far = 500      // default
+    //    light.shadow.mapSize.width = 512;  // default
+    //    light.shadow.mapSize.height = 512; // default
+    //    light.shadow.camera.near = 0.5;       // default
+    //    light.shadow.camera.far = 500      // default
     scene.add(light)
 
     renderer.render(scene, camera)
